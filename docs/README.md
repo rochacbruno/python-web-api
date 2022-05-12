@@ -21,10 +21,9 @@ Uma introdução para quem já tem noções de programação (ex: Já fez o trei
 00. Os principais componentes da arquitetura web client-server
 00. O protocolo HTTP
 00. Server Side Rendering
-00. URLs e formulários com HTML puro
+00. URLs e formulários com HTML puro e CGI
 00. Processando requests com a lib WSGI embutida no Python
 00. Renderizando templates HTML com Jinja2
-00. Adicionando roteamento e criando seu mini-framework simples
 00. O que é uma API e o que é REST?
 
 ## Day 2 - Conhecendo os frameworks web

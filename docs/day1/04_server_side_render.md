@@ -162,7 +162,7 @@ Agora vamos finalmente fazer a renderização das postagens que estão no banco 
 - Fechamos a conexão
 
 `render.py`
-```
+```py
 from pathlib import Path
 from database import conn
 

@@ -4,7 +4,7 @@ Até aqui vimos o funcionamento de uma requisição `GET` com o objetivo **pegar
 
 Acontece que na web também temos a comunicação inversa, o cliente (navegador) pode enviar informações para o servidor e para isso precisamos utilizar uma estrutura de formulários do HTML.
 
-Od formulários foram introduzidos no HTML para permitir o envio
+Os formulários foram introduzidos no HTML para permitir o envio
 de mensagens em páginas de contato, as páginas `contato.html` que tem
 na maioria dos sites.
 
@@ -70,11 +70,9 @@ do tipo `POST`, por padrão ele apenas entende `GET`.
 
 ## CGI
 
-Common Gateway Interface é um protocolo de comunicação para servidores web, o `http.server` que 
-estamos rodando sabe falar o protocolo cgi então para processar nosso formulário tudo o que 
-precisamos é adequar nossa aplicação.
+Common Gateway Interface é um protocolo de comunicação para servidores web, o `http.server` da forma como estamos rodando não tem suporte a CGI, precisamos adicionar o suporte a scripts CGI.
 
-Passo 1 criamos uma pasta chamada `cgi-bin` (este nome é padrão do protocolo CGI) e nesta pasta podemos
+Passo 1 criamos uma pasta chamada `cgi-bin` (este nome é padrão do protocolo CGI, suportado por servidores como Apache, Cherokee etc) e nesta pasta podemos
 colocar scripts CGI escritos em Python ou Perl.
 
 ```
@@ -82,7 +80,7 @@ colocar scripts CGI escritos em Python ou Perl.
 mkdir cgi-bin
 ```
 
-Agora criamos um arquivo chamado `cgi-bin/envia.py`
+Agora criamos um arquivo chamado `cgi-bin/envia.py` e neste script faremos o processamento dos dados vindos do formulário e a resposta será em forma de texto HTML.
 
 ```py
 #!/usr/bin/env python
@@ -158,4 +156,4 @@ Repare também que a URL final é `/cgi-bin/envia.py` 🤷 se você clicar para 
 
 Parabéns você acabou de programar para web do mesmo modo que os entepassados faziam :) 
 
-Agora vamos partir para uma abordagem mais moderna.
+Agora vamos partir para uma abordagem um pouco mais moderna.
