@@ -4,7 +4,7 @@ from database import conn
 # 1 - Obtemos os posts do banco de dados e deserializamos em um dict
 cursor = conn.cursor()
 fields = ("id", "title", "content", "author")
-results = cursor.execute(f"SELECT * FROM post;")
+results = cursor.execute("SELECT * FROM post;")
 posts = [dict(zip(fields, post)) for post in results]
 
 # 2 - Criamos a pasta de destino do site

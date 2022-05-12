@@ -1,5 +1,6 @@
 # 1 - conectamos ao banco de dados
 from sqlite3 import connect
+
 conn = connect("blog.db")
 cursor = conn.cursor()
 
