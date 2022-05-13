@@ -150,7 +150,7 @@ if not count:
 
 # 5 - Verificamos que foi realmente inserido
 posts = cursor.execute("SELECT * FROM post;").fetchall()
-assert len(posts) == 2
+assert len(posts) >= 2
 ```
 
 Agora vamos finalmente fazer a renderização das postagens que estão no banco de dados e preencher os templates HTML.

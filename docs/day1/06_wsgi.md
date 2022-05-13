@@ -378,4 +378,8 @@ E ao clicar para ir a `/3` verá
 ## Conclusão
 
 
-É possível tranquilamente programar para web em Python sem a necessidade de usar frameworks, para isso basta seguir o padrão do protocolo `WSGI`
+No dia a dia é muito melhor e mais produtivo utilizar um framework que já cai trazer a maior parte dessas funcionalidades de forma abstraida e fácil de usar,
+
+O ponto desta aula é que é possível programar para web em Python sem a necessidade de usar frameworks, para isso basta seguir o padrão do protocolo `WSGI`, 
+esse conhecimento de como essa parte funciona por baixo dos frameworks é essencial para que você inclusive saiba usar melhor qualquer um dos
+frameworks do mercado e quem sabe até criar o seu próprio framework se desejar.
