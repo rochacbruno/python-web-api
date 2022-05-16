@@ -51,4 +51,4 @@ if not count:
 
 # 5 - Verificamos que foi realmente inserido
 posts = cursor.execute("SELECT * FROM post;").fetchall()
-assert len(posts) == 2
+assert len(posts) >= 2

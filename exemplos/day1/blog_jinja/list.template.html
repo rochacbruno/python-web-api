@@ -7,7 +7,9 @@
 <body>
     <h1>Blog Posts:</h1>
     <ul>
-    {post_list}
+    {% for post in post_list %}
+        <li><a href="{{ post.id }}">{{ post.title }}</a></li>
+    {% endfor %}
     </ul>
 </body>
 </html>

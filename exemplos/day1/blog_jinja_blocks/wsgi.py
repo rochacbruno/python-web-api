@@ -3,7 +3,7 @@ from pathlib import Path
 from database import conn
 from jinja2 import Environment, FileSystemLoader
 
-env = Environment(loader=FileSystemLoader("."))
+env = Environment(loader=FileSystemLoader("templates"))
 
 def add_new_post(post):
     cursor = conn.cursor()
