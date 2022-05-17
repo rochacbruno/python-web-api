@@ -1,5 +1,4 @@
 import cgi
-from pathlib import Path
 from database import conn
 from jinja2 import Environment, FileSystemLoader
 

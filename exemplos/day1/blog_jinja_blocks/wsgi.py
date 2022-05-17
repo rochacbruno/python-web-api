@@ -1,5 +1,5 @@
+import json
 import cgi
-from pathlib import Path
 from database import conn
 from jinja2 import Environment, FileSystemLoader
 
@@ -68,6 +68,14 @@ def application(environ, start_response):
     elif path == "/new" and method == "GET":
         body = render_template("form.template.html")
         status = "200 OK"
+
+    elif path == "/api" and method == "GET":
+        headers = [("Content-type", "application/json")]
+        posts = get_posts_from_database()
+        status = "200 OK"
+        start_response(status, headers)
+        body = {"posts": posts}
+        return [json.dumps(body).encode("utf-8")]
 
     headers = [("Content-type", "text/html")]
     start_response(status, headers)
