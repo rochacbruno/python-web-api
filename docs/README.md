@@ -25,6 +25,7 @@ Uma introdução para quem já tem noções de programação (ex: Já fez o trei
 00. Processando requests com a lib WSGI embutida no Python
 00. Renderizando templates HTML com Jinja2
 00. O que é uma API e o que é REST?
+00. Criando um mini framework
 
 ## Day 2 - Conhecendo os frameworks web
 

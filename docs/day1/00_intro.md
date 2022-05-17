@@ -57,4 +57,6 @@ A branch `main` do repositório contém apenas os arquivos de documentação.
 
 ## Conclusão
 
+Este é um treinamento de Python para Web e APIs, não é um treinamento focado em um único framework, a intenção é que o conhecimento aqui adquirido sirva para qualquer framework no ecossistema Python.
+
 Vamos começar do básico e evoluir aos poucos até que todos tenham o entendimento completo de Python para Web e API :) 

@@ -446,9 +446,120 @@ e `form.template.html`
 {% endblock %}
 ```
 
+Agora pode executar com `python wsgi.py` e ver o resultado :)
+
+
+## Macros
+
+Uma das vantagens de usar Jinja é possibilidade de reaproveitar código HTML através de macros, que são funções definidas dentro do HTML.
+
+VAmos alterar o `form.template.html` e usar macros para criar os campos do formulário.
+
+```jinja
+{% extends 'base.template.html' %}
+
+{% block headline %}
+  New Post
+{% endblock %}
+
+{% macro field(name, type="input") %}
+<label for="{{name}}">{{name | capitalize}}:</label><br>
+{% if type == "input" %}
+<input type="text" name="{{name}}" /><br>
+{% elif type == "textarea" %}
+<textarea name="{{name}}" cols="30" rows="5"></textarea><br>
+{% endif %}
+{% endmacro %}
+
+{% block content %}
+<form action="/new" method="post">
+    {{ field("title") }}
+    {{ field("content", type="textarea") }}
+    {{ field("author") }}
+    <input type="submit" value="Enviar">
+</form>
+{% endblock %}
+```
+
+
 ## Mas qual a vantagem de usar blocks?
 
 Agora podemos aplicar estilo em nosso bloco apenas alterando o template base :) 
 
 `base.template.html`
 
+```jinja
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    {% block style %}
+    <style>
+      body {
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+      h1 {
+        margin: 0 0 0 0.35em;
+        color: #fff;
+        background-color: rebeccapurple;
+        padding: 24px;
+      }
+      p {
+          color: #222;
+      }
+      small {
+          color: darkgray;
+      }
+      input[type=text] {
+         width: 100%;
+      }
+      textarea {
+          width: 100%;
+      }
+      input[type=submit] {
+          background-color: green;
+          padding: 16px 32px;
+          margin: 4px 2px;
+          color: white;
+          font-weight: bold;
+      }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <h1>{% block headline %}{% endblock %}</h1>
+    <hr />
+    {% block content %}{% endblock %}
+    <hr />
+    <small>{%block footer %}Copyright 2022{% endblock %}</small>
+</body>
+</html>
+```
+
+E você vai reparar que o estilo foi aplicado automaticamente a todas as páginas que extendem o mesmo template.
+
+![](imgs/styled_blog_list.png)
+![](imgs/styled_blog_post.png)
+![](imgs/styled_blog_form.png)
+
+
+> É eu sei, você deve estar pensando "Nossa mas que blog feio!" concordo, meu talento para design é nota 0 :(, mas felizmente :) existem frameworks que podem nos ajudar.
+
+Experimente adicionar a seguinte linha no `base.template.html`
+
+```html
+{% block style %}
+<link rel="stylesheet" href="https://unpkg.com/marx-css/css/marx.min.css">
+...
+```
+
+![](imgs/styled_blog_form_pico.png)
+
+## Conclusão
+
+Usar um bom sistema de templates é essencial para organizar nossa aplicação web e permitir a reutilização de blocos de código HTML.
+
+Nosso foco neste treinamento está no back-end, portanto agora vamos voltar a focar no Python :) 
