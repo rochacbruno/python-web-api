@@ -49,8 +49,7 @@ def application(environ, start_response):
     if path == "/" and method == "GET":
         posts = get_posts_from_database()
         body = render_template(
-            "list.template.html",
-            post_list=get_post_list(posts)
+            "list.template.html", post_list=get_post_list(posts)
         )
         status = "200 OK"
 

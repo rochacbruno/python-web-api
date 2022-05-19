@@ -4,6 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 env = Environment(loader=FileSystemLoader("."))
 
+
 def add_new_post(post):
     cursor = conn.cursor()
     cursor.execute(
@@ -41,10 +42,7 @@ def application(environ, start_response):
 
     if path == "/" and method == "GET":
         posts = get_posts_from_database()
-        body = render_template(
-            "list.template.html",
-            post_list=posts
-        )
+        body = render_template("list.template.html", post_list=posts)
         status = "200 OK"
 
     elif path.split("/")[-1].isdigit() and method == "GET":

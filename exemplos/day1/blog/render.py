@@ -24,9 +24,7 @@ post_list = [
     f"<li><a href='{get_post_url(post)}'>{post['title']}</a></li>"
     for post in posts
 ]
-index_page.write_text(
-    index_template.format(post_list="\n".join(post_list))
-)
+index_page.write_text(index_template.format(post_list="\n".join(post_list)))
 
 # 4 - Renderizamos todas as páginas para cada post  partir do template.
 for post in posts:
