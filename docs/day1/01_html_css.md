@@ -213,3 +213,14 @@ O exemplo completo pode ser encontrado no seguinte URL https://jsfiddle.net/b1o6
 Os exemplos mostrados aqui são apenas introdutórios e não seguem as melhores práticas de HTML, CSS e JS, o foco deste treinamento está nas tarefas de back-end que é o que veremos a seguir portanto caso tenha interesse em desenvolver suas habilidades no front-end eu recomendo os sites da Mozilla e W3C para começar.
 
 Agora vamos ao back-end com Python :)
+
+# Questões
+
+## O que significa HTTP?
+
+## Para que serve o HTML
+
+## Para que serve o CSS
+
+## Para que serve o Javascript
+
