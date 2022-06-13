@@ -1,0 +1,15 @@
+{% extends 'base.template.html' %}
+
+{% block headline %}
+  {{ post.title }}
+{% endblock %}
+    
+{% block content %}
+  <p>
+  {{ post.content }}
+  </p>
+{% endblock %} 
+
+{% block footer %}
+  {{ post.author }}
+{% endblock %}

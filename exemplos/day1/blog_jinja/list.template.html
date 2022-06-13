@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+</head>
+<body>
+    <h1>Blog Posts:</h1>
+    <ul>
+    {% for post in post_list %}
+        <li><a href="{{ post.id }}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

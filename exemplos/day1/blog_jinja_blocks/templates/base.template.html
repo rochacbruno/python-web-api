@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    {% block style %}
+    <!-- CSS only -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/marx-css/css/marx.min.css">
+    <style>
+      body {
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+      h1 {
+        margin: 0 0 0 0.35em;
+        color: #fff;
+        background-color: rebeccapurple;
+        padding: 24px;
+      }
+      p {
+          color: #222;
+      }
+      small {
+          color: darkgray;
+      }
+      input[type=text] {
+         width: 100%;
+      }
+      textarea {
+          width: 100%;
+      }
+      input[type=submit] {
+          background-color: green;
+          padding: 16px 32px;
+          margin: 4px 2px;
+          color: white;
+          font-weight: bold;
+      }
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <h1>{% block headline %}{% endblock %}</h1>
+    <hr />
+    {% block content %}{% endblock %}
+    <hr />
+    <small>{%block footer %}Copyright 2022{% endblock %}</small>
+</body>
+</html>

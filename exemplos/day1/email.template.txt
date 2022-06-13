@@ -1,0 +1,11 @@
+Olá , {{ name }}
+
+Estes são os produtos em promoção:
+
+{% for product in products -%}
+    - {{ product.name | capitalize }} - R$ {{ "%.3f" | format(product.price) }}
+{% endfor %}
+
+{%- if special_customer %}
+E você tem {{ "20%" | addhearts }}  de desconto por ser cliente especial!
+{% endif %}

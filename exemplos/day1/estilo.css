@@ -1,0 +1,20 @@
+body {
+    background-color: lightyellow;
+}
+
+h1 {
+  color: blue;
+}
+
+h2 {
+  color: lightblue;
+}
+
+p {
+  border: 1px dashed black;
+}
+
+img {
+  border-radius: 50%;
+  width: 100px;
+}
