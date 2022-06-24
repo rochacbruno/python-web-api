@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/exemplos/day1/pagina.html"
+    "livePreview.defaultPreviewPath": "/exemplos/day1/pagina.html",
+    "python.formatting.provider": "black"
 }

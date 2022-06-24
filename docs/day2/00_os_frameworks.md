@@ -1,5 +1,9 @@
 # Os frameworks
 
+No Day 1 você aprender sobre `HTTP` e sobre como funcionam os clients e servers e também aprender que um `Request` é um pedido de acesso a um recurso do servidor e que sempre virá acompanhado de um método, ou verbo `GET, POST, PUT, DELETE etc..`, aprendeu também que o servidor devolve um objeto `Response` que sempre vem acompanhado de um código de estado, sendo esse código nas categorias 100, 200, 300, 400 e 500.
+
+Agora vamos partir para os frameworks :) 
+
 Como vimos no Day1 para criar um framework basta utilizarmos os recursos da linguagem Python aliados aos protocolo e os padrões web, especialmente HTTP e WSGI, é uma tarefa bastante divertida, criar seu próprio framework do zero te dá um poder e controle que são realmente incríveis.
 
 Mas ao mesmo tempo criar as coisas do zero traz uma responsabilidade e trabalho imenso até que tudo fique de acordo com o esperado, e a maioria das soluções e testes que você vai precisar fazer com certeza já foram feitos por dezenas de outras pessoas e com a cultura de software open-source podemos simplesmente utilizar o que já existe, estender, contribuir e construir aplicações web baseadas em plataformas sólidas.
