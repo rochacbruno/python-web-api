@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<div class="container">
+<h1>New Post</h1>
+
+<div class="jumbotron">
+
+<form action="/new" method="post">
+    <label for="title">Title:</label><br>
+    <input type="text" name="title" /><br>
+    <label for="content">Content:</label><br>
+    <textarea name="content" cols="30" rows="5"></textarea><br>
+    <input type="submit" value="Enviar">
+</form>
+
+</div>
+</div>
+{% endblock %}

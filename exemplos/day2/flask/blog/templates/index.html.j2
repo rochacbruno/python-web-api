@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+<div class="container">
+<h1>{{config.get('TITLE')}}</h1>
+
+<div class="jumbotron">
+<ul class="list-group">
+    {% for post in posts %}
+    <li class="list-group-item">
+        <a href="{{url_for('post.detail', slug=post.slug)}}">{{post.title}}</a>
+    </li>
+    {% endfor %}
+</ul>
+</div>
+
+</div>
+{% endblock %}

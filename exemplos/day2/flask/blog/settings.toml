@@ -1,0 +1,7 @@
+[default]
+mongo_uri = "mongodb://localhost:27017/blog"
+extensions = [
+    "blog.database:configure",
+    "blog.commands:configure",
+    "flask_bootstrap:Bootstrap"
+]

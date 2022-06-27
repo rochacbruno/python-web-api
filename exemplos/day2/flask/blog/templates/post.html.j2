@@ -1,0 +1,13 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<div class="container">
+<h1>{{ post.title }}</h1>
+
+<div class="jumbotron">
+<h2>{{ post.date }}</h2>
+<p>
+    {{ post.content }}
+</p>
+</div>
+</div>
+{% endblock %}
