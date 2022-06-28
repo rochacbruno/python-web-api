@@ -1,7 +1,13 @@
 [default]
+secret_key = "ThisIsARandomSecretKey"
 mongo_uri = "mongodb://localhost:27017/blog"
+title = "Meu Blog"
 extensions = [
     "blog.database:configure",
     "blog.commands:configure",
-    "flask_bootstrap:Bootstrap"
+    "flask_bootstrap:Bootstrap",
+    "blog.views:configure",
+    "blog.plugins:configure",
+    "blog.auth:configure",
+    "blog.admin:configure",
 ]

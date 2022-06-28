@@ -347,7 +347,7 @@ def new_post(title: str, content: str, published: bool = True) -> str:
             "date": datetime.now(),
         }
     )
-    return str(new.inserted_id)
+    return slug
 ```
 
 Nesse ponto já podemos abrir o `shell` e testar se está tudo funcionando:
@@ -358,7 +358,7 @@ In [1]: from blog.posts import get_all_posts, get_post_by_slug, update_post_by_s
 
 # Criar um novo post
 In [2]: new_post(title="Flask é legal", content="Eu gosto de flask")
-Out[2]: '62ba02d2ba946f4d625c87a7'
+Out[2]: 'flask-é-legal'
 
 # Buscar o post mais recente
 In [3]: list(get_all_posts())[-1]

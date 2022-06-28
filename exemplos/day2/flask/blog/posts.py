@@ -28,4 +28,4 @@ def new_post(title: str, content: str, published: bool = True) -> str:
             "date": datetime.now(),
         }
     )
-    return str(new.inserted_id)
+    return slug
