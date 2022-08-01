@@ -36,14 +36,12 @@ deles.
 
 01. Motivos para usar e diferentes tipos de frameworks
 00. Criando um aplicativo simples usando os 3 principais frameworks  
-    - a. Flask / FastAPI / Django  
+    - a. Flask / Django  
         - a. Roteamento de URLS e views  
         - b. Processamento de requests
-        - c. Sessions e Cookies
         - d. Templates HTML
-        - e. Adicionando bancos de dados SQL
+        - e. Adicionando bancos de dados NoSQL e SQL
         - f. Plugins e ferramentas administrativas
-        - g. API Rest com JSON
 00. Dicas para escolher o melhor framework para o seu projeto
 
 ## Day 3 - Colocando a app para rodar (a.k.a deploy)
