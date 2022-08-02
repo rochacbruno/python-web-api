@@ -1,4 +1,4 @@
-# 23 Usuário e autenticação
+# 23 Usuário e autenticação + Admin
 
 O Django possui um sistema de usuários que permite facilmente proteger as views com login e também tem uma interface administrativa, além disso o Django já vem com uma série de comandos administrativos para ajudar na criação de usuários.
 
@@ -28,118 +28,6 @@ Bypass password validation and create user anyway? [y/N]: y
 Superuser created successfully.
 ```
 
-## Shell
-
-Uma das ferramentas mais úteis do Django é o shell administrativo
-
-```bash
-django-admin shell
->>>
-```
-
-Ele abre um terminal REPL do Python com o contexto do Django onde você pode importar os objetos do sue projeto.
-
-Para uma experiência mais rica eu recomendo instalar o pacote `django-extensions`
-
-```bash
-pip install django-=extensions ipython ipdb
-```
-
-e coloque `django_extensions` em `INSTALLED_APPS` no `settings.py`
-
-Que oferece uma série de utilidades interessantes, algumas delas:
-
-
-### Exibir todas as URLs registradas 
-
-```bash
-django-admin show_urls
-
-/       blog.views.view index
-/<slug:slug>/   blog.views.view detail
-/admin/ django.contrib.admin.sites.index        admin:index
-/admin/<app_label>/     django.contrib.admin.sites.app_index    admin:app_list
-/admin/<url>    django.contrib.admin.sites.catch_all_view
-/admin/auth/group/      django.contrib.admin.options.changelist_view    admin:auth_group_changelist
-/admin/auth/group/<path:object_id>/     django.views.generic.base.view
-/admin/auth/group/<path:object_id>/change/      django.contrib.admin.options.change_view        admin:auth_group_change
-/admin/auth/group/<path:object_id>/delete/      django.contrib.admin.options.delete_view        admin:auth_group_delete
-/admin/auth/group/<path:object_id>/history/     django.contrib.admin.options.history_view       admin:auth_group_history
-/admin/auth/group/add/  django.contrib.admin.options.add_view   admin:auth_group_add
-/admin/auth/user/       django.contrib.admin.options.changelist_view    admin:auth_user_changelist
-/admin/auth/user/<id>/password/ django.contrib.auth.admin.user_change_password  admin:auth_user_password_change
-/admin/auth/user/<path:object_id>/      django.views.generic.base.view
-/admin/auth/user/<path:object_id>/change/       django.contrib.admin.options.change_view        admin:auth_user_change
-/admin/auth/user/<path:object_id>/delete/       django.contrib.admin.options.delete_view        admin:auth_user_delete
-/admin/auth/user/<path:object_id>/history/      django.contrib.admin.options.history_view       admin:auth_user_history
-/admin/auth/user/add/   django.contrib.auth.admin.add_view      admin:auth_user_add
-/admin/autocomplete/    django.contrib.admin.sites.autocomplete_view    admin:autocomplete
-/admin/jsi18n/  django.contrib.admin.sites.i18n_javascript      admin:jsi18n
-/admin/login/   django.contrib.admin.sites.login        admin:login
-/admin/logout/  django.contrib.admin.sites.logout       admin:logout
-/admin/password_change/ django.contrib.admin.sites.password_change      admin:password_change
-/admin/password_change/done/    django.contrib.admin.sites.password_change_done admin:password_change_done
-/admin/r/<int:content_type_id>/<path:object_id>/        django.contrib.contenttypes.views.shortcut      admin:view_on_site
-/new/   blog.views.new_post     new_post
-```
-
-### Listar as propriedades de um Model
-
-```bash
-django-admin list_model_info --model blog.Post
-
-blog.Post
-    Fields:
-        id -
-        title -
-        slug -
-        content -
-        published -
-        date -
-    Methods (non-private/internal):
-        get_next_by_date()
-        get_previous_by_date()
-
-Total Models Listed: 1
-```
-
-### Um shell com todos os objetos automaticamente importados
-
-```bash
-❯ django-admin shell_plus
-
-# Shell Plus Model Imports
-from blog.models import Post
-from django.contrib.admin.models import LogEntry
-from django.contrib.auth.models import Group, Permission, User
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.sessions.models import Session
-# Shell Plus Django Imports
-from django.core.cache import cache
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.db import transaction
-from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When
-from django.utils import timezone
-from django.urls import reverse
-from django.db.models import Exists, OuterRef, Subquery
-Python 3.10.5 (main, Jun  6 2022, 18:49:26) [GCC 12.1.0]
-Type 'copyright', 'credits' or 'license' for more information
-IPython 8.4.0 -- An enhanced Interactive Python. Type '?' for help.
-
-In [1]: 
-```
-
-O shell é muito útil para testar querysets do Django ORM
-
-```python
-In [1]: Post.objects.all()
-Out[1]: <QuerySet [<Post: Um Novo post no Django>]>
-
-In [2]: User.objects.all()
-Out[2]: <QuerySet [<User: admin>]>
-```
-
 
 ## Autenticação
 
@@ -148,8 +36,12 @@ Agora vamos aproveitar que temos um usuário e vamos proteger a nossa view `/new
 Edite o arquivo `views.py`
 
 ```python
+from django.contrib.auth.decorators import login_required
+...
 
-
+@login_required
+def new_post(request):
+    ...
 ```
 
 Agora precisamos habilitar o sistema default de login alterando o arquivo `urls.py`
@@ -179,12 +71,15 @@ touch templates/registration/login.html
 
 `templates/registration/login.html`
 ```html
+{% extends 'base.html' %} 
+{% block content %} 
 <h2>Log In</h2>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Log In</button>
 </form>
+{% endblock content %}
 ```
 
 Agora ao tentar acessar a URL http://127.0.0.1:8000/new/ acontecerá um redirecionamento para a página de login
@@ -194,3 +89,176 @@ Agora ao tentar acessar a URL http://127.0.0.1:8000/new/ acontecerá um redireci
 
 
 Basta usar `admin` e `admin` que conseguirá acessar :) 
+
+
+# Django Admin e Management Commands
+
+O Django possui 2 ferramentas administrativas, os management commands e o Django Admin,
+vamos ver como podemos usar cada um deles.
+
+
+## Management commands
+
+Vamos adicionar um comando que permita escrever um novo post através da linha de 
+comando.
+
+```bash
+django-admin add-post --title "Titulo" --content ¨"Este é um post da linha de comando"
+```
+
+Primeiro criamos a pasta para os comandos e o caminho deve ser exatamente uma pasta chamada `management/commands` dentro da app `blog`
+
+```bash
+mkdir -p blog/management/commands
+```
+
+Também precisamos transformar `management` e `commands` em módulos Python.
+
+```bash
+touch blog/management/__init__.py
+touch blog/management/commands/__init__.py
+```
+
+Agora criamos o arquivo para o nosso primeiro comando:
+
+```bash
+touch blog/management/commands/add_post.py
+```
+
+E neste arquivo escrevemos o comando:
+
+
+`add_post.py`
+```python
+from django.core.management.base import BaseCommand, CommandError
+from blog.models import Post
+from django.utils.text import slugify
+
+
+class Command(BaseCommand):
+    """Adds new post to the database
+    
+    $ django-admin add_post --title "Titulo" --content "Conteudo
+    """
+    help = "Creates a new Post in the database"
+
+    def add_arguments(self, parser):
+        parser.add_argument("--title", type=str, required=True)
+        parser.add_argument("--content", type=str, required=True)
+
+    def handle(self, *args, **options):
+        try:
+            post = Post.objects.create(
+                title=options["title"],
+                slug=slugify(options["title"]),
+                content=options["content"],
+            )
+        except Exception as e:
+            raise CommandError(e)
+        else:
+            self.stdout.write(self.style.SUCCESS(f"Post {post.title} created."))
+```
+
+
+Agora verá o comando disponível
+
+```
+django-admin --help    
+
+Type 'django-admin help <subcommand>' for help on a specific subcommand.
+
+Available subcommands:
+
+...
+
+[blog]
+    add_post
+
+...
+``` 
+
+E pode utilizar
+
+
+```bash
+django-admin add_post --title "Post do terminal" --content "Postagem bem legal no terminal" 
+Post "Post do terminal" created
+```
+
+Acesse o blog http://127.0.0.1:8000/ e verá a postagem publicada.
+
+
+## Interface Admin
+
+O Admin é a principal ferramenta e talvez o motivo de muitas pessoas escolherem o Django, esta interface já vam habilidade por default e pode ser acessada em http://127.0.0.1:8000/admin/ usando a conta de superuser `admin, admin`
+
+
+![](imgs/django_blog_admin1.png)
+
+Por default apenas os models referentes ao controle de usuários é ativado no admin, para adicionar os outros models precisamos alterar o arquivo `admin.py` dentro de cada app.
+
+
+`blog/admin.py`
+
+```python
+from django.contrib import admin
+
+from blog.models import Post
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ["title", "published", "date"]
+    list_filter = ["published", "date"]
+    search_fields = ["title", "content"]
+    prepopulated_fields = {"slug": ("title",)}
+    ordering = ["-date"]
+
+
+admin.site.register(Post, PostAdmin)
+
+```
+
+Agora pode dar o refresh na página http://127.0.0.1:8000/admin/ e verá a app blog listada
+
+
+![](imgs/django_blog_admin2.png)
+
+E através do admin podemos adicionar novos posts, alterar e deletar, experimente.
+
+
+![](imgs/django_blog_admin3.png)
+
+
+Ao listar todos os posts repare que tem um dropdown **action** que permite deletar vários posts selecionados
+
+![](imgs/django_blog_admin4.png)
+
+Podemos adicionar outras actions para serem aplicadas a todos os itens selecionados, por exemplo, para alterar o
+status de publicado/não publicado.
+
+
+`admin.py`
+```python
+
+class PostAdmin(admin.ModelAdmin):
+    ...
+    actions = ["publish"]
+
+    @admin.action(description="Publish/Unpublish posts")
+    def publish(self, request, queryset):
+        for post in queryset:
+            post.published = not post.published
+            post.save()
+```
+
+
+![](imgs/django_blog_admin5.png)
+
+
+## Conclusão
+
+O Django é um dos frameworks mais produtivos pelo fato de entregar muitas coisas prontas e também o mais utilizado em grandes projetos por ser bastante suportado pela comunidade.
+
+O Django é uma ótima opção para sites de gerenciamento de conteúdo (CMS) que usem banco de dados relacional (SQL).
+
+Em um próximo capitulo do treinamento vamos fazer um projeto completo, mas será usando o FastAPI e o motivo de usa-lo é o fato dele não abstrair tantas coisas e de fato podermos aprender sem ter as mágicas do Django escondendo a implementação.
