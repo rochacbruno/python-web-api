@@ -50,7 +50,7 @@ Nesta parte vamos colocar uma das aplicações que desenvolvemos em produção
 usando as principais stacks de tecnologia.
 
 01. Os protocolos web do Python - WSGI e ASGI
-00 12 factors
+00. 12 factors
 00. Os principais app servers para Python - gunicorn, uvicorn, uwsgi
 00. Configuração do proxy reverso - NGinx
 00. Serviços e configuração para Deploy em VM e VPS
