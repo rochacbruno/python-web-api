@@ -1,0 +1,4 @@
+[production]
+allowed_hosts = ["*"]
+debug = false
+DATABASES__default__NAME="/app/db.sqlite3"

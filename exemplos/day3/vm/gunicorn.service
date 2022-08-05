@@ -1,0 +1,20 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Environment=PYTHONPATH=/app/python-web-api/exemplos/day2/django/
+Environment=DJANGO_SETTINGS_MODULE=djblog.settings
+Environment=BLOG_ENV=production
+User=osboxes
+Group=www-data
+WorkingDirectory=/app
+ExecStart=/home/osboxes/.venv/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          djblog.wsgi
+
+[Install]
+WantedBy=multi-user.target
