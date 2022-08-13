@@ -1,0 +1,7 @@
+[production]
+allowed_hosts = ["*"]
+debug = false
+DATABASES__default__NAME="{{ database_path }}"
+STATIC_ROOT="{{ base_path }}/static/"
+STATICFILES_DIR="{{base_path }}/static/"
+STATIC_URL="/static/"

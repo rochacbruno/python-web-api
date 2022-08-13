@@ -1,0 +1,164 @@
+---
+- hosts: webservers
+  remote_user: osboxes
+  vars:
+    system_user: osboxes
+    base_path: /app
+    repo_url: 'https://github.com/rochacbruno/python-web-api'
+    repo_branch: day3
+    repo_path: "{{ base_path }}/python-web-api" 
+    app_path: "{{ repo_path }}/exemplos/day2/django"
+    app_name: djblog
+    settings_path: "{{ app_name }}.settings"
+    database_path: "{{ base_path }}/db.sqlite3"
+    venv_path: /home/{{ system_user }}/.venv
+    django_admin: "{{ venv_path }}/bin/django-admin"
+  environment:
+    PYTHONPATH: "{{ app_path }}"
+    DJANGO_SETTINGS_MODULE: "{{ settings_path }}"
+    BLOG_ENV: production
+  tasks:
+
+    - name: Instalação de pacotes
+      become: true
+      apt:
+        update_cache: true
+        state: present
+        pkg:
+          - python3-dev
+          - python-is-python3
+          - nginx
+          - git
+          - sqlite3
+          - python3.10-venv
+
+    - name: Virtual Env Python
+      pip:
+        virtualenv: "{{ venv_path }}"
+        virtualenv_command: python3.10 -m venv
+        name: pip
+        state: latest
+
+    - name: Adding user to www-data group
+      become: true
+      user: 
+        name: "{{ system_user }}"
+        groups: 
+          - www-data
+        append: true
+
+    - name: Base APP Folder
+      become: true
+      file:
+        path: "{{ base_path }}"
+        state: directory
+        owner: "{{ system_user }}"
+        group: www-data
+        mode: 0775
+        recurse: true
+
+    - name: Respository Codebase
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_path }}"
+        single_branch: true
+        version: "{{ repo_branch }}"
+        force: true
+
+    - name: Installing the project 
+      pip:
+        virtualenv: "{{ venv_path }}"
+        name: file://{{app_path}}
+        state: present
+
+    - name: Place the app settings file 
+      template:
+        src: blog_settings.toml.j2
+        dest: "{{ base_path }}/blog_settings.toml"
+
+    - name: Django - Get the database name
+      command:
+        chdir: "{{ base_path }}"
+        cmd: >-
+          {{ django_admin }} shell -c
+          "from django.conf import settings;print(settings.DATABASES.default.NAME)"
+      register: django_db_name
+
+    - name: Django - Assert App is correctly set
+      assert:
+        that: django_db_name.stdout == database_path
+
+    - name: Django - DB Migration
+      command:
+        chdir: "{{ base_path }}"
+        cmd: "{{ django_admin }} migrate --noinput"
+
+    - name: Django - Check if admin user exists 
+      command:
+        chdir: "{{ base_path }}"
+        cmd: >-
+          {{ django_admin }} shell -c 
+          "from django.contrib.auth.models import User;print(User.objects.count())"
+      register: django_admin_user_count
+
+    - name: Django - Create admin user
+      command:
+        chdir: "{{ base_path }}"
+        cmd: >-
+          {{ django_admin }} shell -c 
+          "from django.contrib.auth.models import User;
+          User.objects.create_superuser('admin', 'admin@example.com', 'admin')"
+      when: django_admin_user_count.stdout == "0"
+       
+    - name: Django - Collect static files
+      command:
+        chdir: "{{ base_path }}"
+        cmd: "{{ django_admin }} collectstatic --noinput"
+
+    - name: Gunicorn
+      become: true
+      block:
+        - name: Gunicorn - Install 
+          pip:
+            name: gunicorn
+            virtualenv: "{{ venv_path }}"
+            state: present
+
+        - name: Gunicorn - socket file 
+          template:
+            src: templates/gunicorn.socket.j2
+            dest: /etc/systemd/system/gunicorn.socket
+
+        - name: Gunicorn - service file
+          template:
+            src: templates/gunicorn.service.j2
+            dest: /etc/systemd/system/gunicorn.service
+            
+        - name: Gunicorn - Reload systemd
+          systemd:
+            daemon_reload: yes
+      
+        - name: Gunicorn - Start service
+          systemd:
+            state: started
+            enabled: true
+            name: gunicorn.socket
+
+    - name: NGINX
+      become: true
+      block:
+        - name: NGINX - Copy site config
+          template:
+            src: templates/nginx_blog.j2
+            dest: "/etc/nginx/sites-available/nginx_blog"
+
+        - name: NGINX - Enable site config
+          file:
+            src: "/etc/nginx/sites-available/nginx_blog"
+            dest: /etc/nginx/sites-enabled/default
+            state: link
+        
+        - name: NGINX - Reload service
+          systemd:
+            state: restarted
+            name: nginx

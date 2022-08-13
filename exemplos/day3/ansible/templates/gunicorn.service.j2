@@ -1,0 +1,20 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Environment=PYTHONPATH={{ app_path }}
+Environment=DJANGO_SETTINGS_MODULE={{ settings_path }}
+Environment=BLOG_ENV=production
+User={{ system_user }}
+Group=www-data
+WorkingDirectory={{ base_path }}
+ExecStart={{ venv_path }}/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          {{ app_name }}.wsgi
+
+[Install]
+WantedBy=multi-user.target
