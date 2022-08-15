@@ -1,0 +1,25 @@
+body {
+    background-color: rgb(240, 255, 250);
+}
+
+img {
+    border-radius: 50%;
+}
+
+#logo_python {
+    width: 100px
+}
+
+#logo_django {
+    width: 50px
+}
+
+p {
+    padding: 5px;
+}
+p.principal {
+    border: 1px dashed black;
+}
+p.aviso {
+    border: 1px solid red;
+}
