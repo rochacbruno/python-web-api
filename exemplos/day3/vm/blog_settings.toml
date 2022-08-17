@@ -2,3 +2,6 @@
 allowed_hosts = ["*"]
 debug = false
 DATABASES__default__NAME="/app/db.sqlite3"
+STATIC_ROOT="/app/static/"
+STATICFILES_DIR="/app/static/"
+STATIC_URL="/static/"
