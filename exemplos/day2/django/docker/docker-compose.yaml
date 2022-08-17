@@ -1,0 +1,52 @@
+volumes:
+  blog_pg_data:
+    name: blog_pg_data
+  blog_static:
+    name: blog_static
+
+services:
+  django:
+    image: compose-django-blog:latest
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    expose: 
+      - 8000
+    volumes:
+      - "blog_static:/static"
+    depends_on:
+      - blog_postgres
+    environment:
+      - BLOG_STATIC_ROOT=/static/
+      - BLOG_STATIC_URL=/static/
+      - BLOG_DEBUG=false
+      - BLOG_ALLOWED_HOSTS=["*"]
+      - BLOG_DATABASES__default__ENGINE=django.db.backends.postgresql
+      - BLOG_DATABASES__default__NAME=blog
+      - BLOG_DATABASES__default__USER=blog
+      - BLOG_DATABASES__default__PASSWORD=blog
+      - BLOG_DATABASES__default__HOST=blog_postgres
+      - DJANGO_SETTINGS_MODULE=djblog.settings
+      - PYTHONPATH=/app
+      - PATH="${PATH}:/home/python/.local/bin"
+
+  blog_postgres:
+    image: "postgres:12"
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=blog
+      - POSTGRES_PASSWORD=blog
+      - POSTGRES_DB=blog
+    volumes:
+      - "blog_pg_data:/var/lib/postgresql/data"
+
+  blog_nginx:
+    image: nginx:1.21-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - "blog_static:/usr/share/nginx/html"
+      - "./nginx.conf:/etc/nginx/conf.d/default.conf:z"
+    depends_on:
+      - django
