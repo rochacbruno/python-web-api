@@ -1,3 +1,9 @@
+---
+tags: web,day3
+robots: noindex, nofollow
+lang: pt-br
+---
+
 # 29 Automatizando o Deploy
 
 Vamos usar o **Ansible** para criar a automatização do deploy,
@@ -47,7 +53,7 @@ Caso queira fazer o deploy em mais servidores ao mesmo tempo poderá listar quan
 
 ### 2 testando o Ansible
 
-`exemplos/day3/ansible/django-deploy.yaml
+`exemplos/day3/ansible/django-deploy.yaml`
 ```yaml
 ---
 - hosts: webservers
@@ -112,7 +118,7 @@ Os passos que vamos colocar em cada uma das tasks do playbook são:
 5. App Server
 6. Web Server
 
-`exemplos/day3/ansible/django-deploy.yaml
+`exemplos/day3/ansible/django-deploy.yaml`
 ```yaml
 ---
 - hosts: webservers
@@ -363,4 +369,83 @@ changed: [192.168.1.101]
 
 PLAY RECAP **********************************************************************
 192.168.1.101              : ok=22   changed=15   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+```
+
+
+## Templates
+
+Na pasta `templates`
+
+
+`blog_settings.toml.j2`
+```html
+[production]
+allowed_hosts = ["*"]
+debug = false
+DATABASES__default__NAME="{{ database_path }}"
+STATIC_ROOT="{{ base_path }}/static/"
+STATICFILES_DIR="{{base_path }}/static/"
+STATIC_URL="/static/"
+```
+
+`gunicorn.service.j2`
+```ini
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Environment=PYTHONPATH={{ app_path }}
+Environment=DJANGO_SETTINGS_MODULE={{ settings_path }}
+Environment=BLOG_ENV=production
+User={{ system_user }}
+Group=www-data
+WorkingDirectory={{ base_path }}
+ExecStart={{ venv_path }}/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          {{ app_name }}.wsgi
+
+[Install]
+WantedBy=multi-user.target
+```
+
+`gunicorn.socket.j2`
+```ini
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+
+```
+
+
+`nginx_blog.j2`
+
+```nginx
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        autoindex on;
+        alias {{ base_path }}/static/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+}
+
 ```
