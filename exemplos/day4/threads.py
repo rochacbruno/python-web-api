@@ -3,14 +3,14 @@ import concurrent.futures
 
 
 def consulta_dados():
-    print("Consultando dados...")
     time.sleep(2)
+    print("Consultando dados...")
     return "dados"
 
 
 def processa_dados(dados):
-    print("Processando dados...")
     time.sleep(2)
+    print("Processando dados...")
 
 
 def grava_log():
